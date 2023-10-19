@@ -1,5 +1,6 @@
 .idea
-_test/
-library/
-log/
 .gitignore
+_test/
+library/*
+log/*
+env.ini

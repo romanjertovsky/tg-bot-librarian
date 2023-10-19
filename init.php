@@ -9,6 +9,18 @@ require_once 'helpers.php';
 header('Content-Type: application/json; charset=utf-8');
 
 
+if(env('log_write')) {
+    ini_set('log_errors', 1);
+    ini_set(
+        'error_log',
+        BASE_DIR .
+        'log' . DIRECTORY_SEPARATOR .
+        date('Y-m-d') .
+        '_' .
+        env('log_err_postfix') .
+        '.log');
+}
+
 
 if (env('debug')) {
 

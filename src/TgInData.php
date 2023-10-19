@@ -9,9 +9,9 @@ abstract class TgInData
 
     abstract public function isCallback(): bool;
     abstract public function getCallbackData(): ?string;
-    abstract public function getUsername(): string;
-    abstract public function getChatId(): string;
-    abstract public function getText(): string;
+    abstract public function getUsername(): ?string;
+    abstract public function getChatId(): ?string;
+    abstract public function getText(): ?string;
 
     private array $aTestMessage =
         [
