@@ -3,21 +3,21 @@
 namespace RomanJertovsky\TgBotLibrarian;
 
 
-
+/*
+ * В этом классе - вся логика работы бота
+ */
 class Bot
 {
 
     public function run()
     {
 
-        // Получение сообщения
-        $oMessageIn     = new ParseIn();
+        // Подготовка
         $oTgPost        = new TgPost();
-        $oMessage       = new Message();
         $oLibrary       = new Library();
+        $oMessageIn     = new MessageIn();
+        $oMessageOut    = new MessageOut();
 
-        $oMessage->setChatId($oMessageIn->getChatId());
-        plog($oMessageIn->getMessageArray());
 
         if($oMessageIn->isCallback()) {
         // Если нажата inline-кнопка
@@ -25,8 +25,8 @@ class Bot
             $sRoute = $oMessageIn->getCallbackData();
 
             $aArticle = $oLibrary->getArticleArray($sRoute);
-            $oMessage->setText($aArticle['text']);
-            $oMessage->setImage($aArticle['image']);
+            $oMessageOut->setText($aArticle['text']);
+            $oMessageOut->setImage($aArticle['image']);
 
             $aDirTitles = $oLibrary->getDirTitles($sRoute);
 
@@ -36,7 +36,7 @@ class Bot
                 $aDirTitles[$sBackWay] = "⬅️ Назад";
             }
 
-            $oMessage->setInlineKeyboardFromDirs($aDirTitles);
+            $oMessageOut->setInlineKeyboardFromDirs($aDirTitles);
 
 
         } elseif ($oMessageIn->getText() === 'Главное меню 📋') {
@@ -48,12 +48,12 @@ class Bot
 
             $aArticle = $oLibrary->getArticleArray('');
 
-            $oMessage->setText($aArticle['text']);
-            $oMessage->setImage($aArticle['image']);
+            $oMessageOut->setText($aArticle['text']);
+            $oMessageOut->setImage($aArticle['image']);
 
             $aDirTitles = $oLibrary->getDirTitles('');
 
-            $oMessage->setInlineKeyboardFromDirs($aDirTitles);
+            $oMessageOut->setInlineKeyboardFromDirs($aDirTitles);
 
         } else {
         // Разбор остальных сообщений
@@ -72,8 +72,8 @@ class Bot
                 ]
             ];
 
-            $oMessage->setText($oLibrary->getWelcome());
-            $oMessage->setKeyboard([
+            $oMessageOut->setText($oLibrary->getWelcome());
+            $oMessageOut->setKeyboard([
                 [
                     [
                     'text'  => 'Главное меню 📋'
@@ -90,7 +90,8 @@ class Bot
 
         }
 
-        $oTgPost->sendMessage($oMessage);
+        $oMessageOut->setChatId($oMessageIn->getChatId());
+        $oTgPost->sendMessage($oMessageOut);
 
     }
 

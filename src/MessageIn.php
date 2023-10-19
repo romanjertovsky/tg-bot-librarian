@@ -3,7 +3,7 @@
 namespace RomanJertovsky\TgBotLibrarian;
 
 
-class ParseIn extends InData
+class MessageIn extends TgInData
 {
 
     public function isCallback(): bool

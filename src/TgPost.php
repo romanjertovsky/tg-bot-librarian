@@ -2,21 +2,20 @@
 
 namespace RomanJertovsky\TgBotLibrarian;
 
-
+/*
+ * Класс - отправщик
+ */
 class TgPost
 {
 
-
-    public function sendMessage(Message $Message): void
+    public function sendMessage(MessageOut $messageOut): void
     {
 
-        $sImage = $Message->getImage();
-        if(!is_null($sImage)) {
-            $this->tgSendPhoto($sImage, $Message->getChatId());
-        }
+        // Если в сообщении есть картинка, то сначала отправляю её
+        if(!is_null($messageOut->getImage()))
+            $this->tgSendPhoto($messageOut->getImage(), $messageOut->getChatId());
 
-        $aMessage = $Message->getMessageArray();
-        $jsonMessage = $this->prepareJson($aMessage);
+        $jsonMessage = $this->prepareJson($messageOut->getMessageArray());
         $this->tgSendMessage($jsonMessage);
 
     }
@@ -25,13 +24,11 @@ class TgPost
     private function prepareJson(array $MessageArray): string
     {
 
-        $MessageArray['parse_mode'] = 'markdown';
+        $MessageArray['parse_mode'] = env('parse_mode');
 
-        $jsonMessage = json_encode(
+        return json_encode(
             $MessageArray,
             JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
-
-        return $jsonMessage;
 
     }
 
@@ -43,10 +40,10 @@ class TgPost
         $oCurl = curl_init($sUrl);
 
         curl_setopt_array($oCurl, [
-            CURLOPT_RETURNTRANSFER  => true,
             CURLOPT_HEADER          => false,
-            CURLOPT_SSL_VERIFYPEER  => false,
             CURLOPT_POSTFIELDS      => $jsonMessage,
+            CURLOPT_RETURNTRANSFER  => true,
+            CURLOPT_SSL_VERIFYPEER  => false,
             CURLOPT_HTTPHEADER      =>
                 [
                     'Content-Type:application/json',
@@ -86,9 +83,9 @@ class TgPost
 
         curl_setopt_array($oCurl, [
             CURLOPT_POST            => true,
+            CURLOPT_HEADER          => false,
             CURLOPT_POSTFIELDS      => $messageArray,
             CURLOPT_RETURNTRANSFER  => true,
-            CURLOPT_HEADER          => false
         ]);
 
         $sResult = curl_exec($oCurl);

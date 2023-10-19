@@ -3,7 +3,7 @@
 namespace RomanJertovsky\TgBotLibrarian;
 
 
-class Message
+class MessageOut
 {
 
     private int     $chat_id;

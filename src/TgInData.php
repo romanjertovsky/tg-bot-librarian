@@ -2,7 +2,7 @@
 
 namespace RomanJertovsky\TgBotLibrarian;
 
-abstract class InData
+abstract class TgInData
 {
 
     private static array $aInData = [];
