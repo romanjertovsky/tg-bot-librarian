@@ -108,7 +108,7 @@ class Library
                     return $this->makeErrMsg('getArticleArray: ошибка JSON: ' . json_last_error_msg());
 
                 // Проверка наличия изображения
-                if(isset($articleArray['image']))
+                if(isset($articleArray['image'])) {
 
                     // Если изображение есть в каталоге
                     if(file_exists($sFullPath . $articleArray['image']))
@@ -117,6 +117,21 @@ class Library
                     else
                         // Нет: удаление элемента массива
                         unset($articleArray['image']);
+
+                }
+
+                // Проверка наличия файла-статьи
+                if(isset($articleArray['ext'])) {
+
+                    // Если файл есть в каталоге
+                    if(file_exists($sFullPath . $articleArray['ext']))
+                        // Есть, загрузка содержимого в text
+                        $articleArray['text'] .= file_get_contents($sFullPath . $articleArray['ext']);
+                    else
+                        // Нет: удаление элемента массива
+                        unset($articleArray['ext']);
+
+                }
 
                 return $articleArray;
 
