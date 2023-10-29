@@ -17,7 +17,11 @@ class Bot
         $oLibrary       = new Library();
         $oMessageIn     = new MessageIn();
         $oMessageOut    = new MessageOut();
+        if(is_null($oMessageIn->getUsername()))
+            errorDie('username не может быть пустым');
         $oSubscriber    = new Subscriber($oMessageIn->getUsername());
+
+        plog($oMessageIn->getMessageArray());
 
 
         if($oMessageIn->isCallback()) {
@@ -84,7 +88,7 @@ class Bot
                     ],
                     [
                         'text'  => 'Создатели 👨‍💻',
-                        'url' => 'https://YOUR/BUTTON/URL'
+                        'url' => '/creators'
                     ],
                     [
                         'text'  => 'Обратная связь ✉️',

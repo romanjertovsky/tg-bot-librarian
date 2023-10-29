@@ -5,10 +5,10 @@ namespace RomanJertovsky\TgBotLibrarian;
 class Subscriber
 {
 
-    private ?string $username = null;
+    private ?string $username;
     private bool $isPremium;
 
-    public function __construct(string $username)
+    public function __construct(?string $username)
     {
         $this->username = $username;
     }

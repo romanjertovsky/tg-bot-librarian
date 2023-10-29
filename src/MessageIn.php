@@ -24,16 +24,16 @@ class MessageIn extends TgInData
     }
 
 
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
         if($this->isCallback())
-            return $this->getMessageArray()['callback_query']['from']['username'];
+            return $this->getMessageArray()['callback_query']['from']['username'] ?? null;
         else
-            return $this->getMessageArray()['message']['from']['username'];
+            return $this->getMessageArray()['message']['from']['username'] ?? null;
     }
 
 
-    public function getChatId():string
+    public function getChatId(): ?string
     {
         if($this->isCallback())
             return $this->getMessageArray()['callback_query']['message']['chat']['id'];
@@ -42,7 +42,7 @@ class MessageIn extends TgInData
     }
 
 
-    public function getText(): string
+    public function getText(): ?string
     {
         if($this->isCallback())
             return $this->getMessageArray()['callback_query']['message']['text'];
