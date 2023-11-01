@@ -16,12 +16,10 @@ class Bot
         $oTgPost        = new TgPost();
         $oLibrary       = new Library();
         $oMessageIn     = new MessageIn();
-        $oMessageOut    = new MessageOut();
         if(is_null($oMessageIn->getUsername()))
             errorDie('username не может быть пустым');
+        $oMessageOut    = new MessageOut();
         $oSubscriber    = new Subscriber($oMessageIn->getUsername());
-
-        plog($oMessageIn->getMessageArray());
 
 
         if($oMessageIn->isCallback()) {
@@ -88,7 +86,8 @@ class Bot
                     ],
                     [
                         'text'  => 'Создатели 👨‍💻',
-                        'url' => '/creators'
+                        'request_location' => true
+//                        'url' => '/creators'
                     ],
                     [
                         'text'  => 'Обратная связь ✉️',
