@@ -1,5 +1,6 @@
 <?php
 
+const INI_FILE = 'env.ini';
 require_once '../init.php';
 
 

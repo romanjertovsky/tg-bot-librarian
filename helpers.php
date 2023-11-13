@@ -9,14 +9,20 @@ $ENV_CONFIG = []; // Загруженные функцией env() настро�
  * Доступ к значениям файла конфигурации env.ini
  * @param string $key - ключ
  * @param string|null $default - значение, если ключа не найдено
- * @return string
+ * @return string|null
  */
-function env(string $key, string $default = null): string {
+function env(string $key, string $default = null): ?string {
 
     global $ENV_CONFIG;
 
-    if(empty($ENV_CONFIG))
-        $ENV_CONFIG = parse_ini_file('env.ini', false, INI_SCANNER_TYPED);
+    $iniFilePath = BASE_DIR . (defined('INI_FILE') ? INI_FILE : 'env.ini');
+
+    if(empty($ENV_CONFIG)) {
+        if(file_exists($iniFilePath))
+            $ENV_CONFIG = parse_ini_file($iniFilePath, false, INI_SCANNER_TYPED);
+        else
+            errorDie('ini file doesnt exist');
+    }
 
     if(array_key_exists($key, $ENV_CONFIG))
         return $ENV_CONFIG[$key];
@@ -25,7 +31,7 @@ function env(string $key, string $default = null): string {
         return $default;
 
     else
-        return '';
+        return null;
 
 }
 

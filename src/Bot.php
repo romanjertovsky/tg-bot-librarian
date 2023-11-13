@@ -19,7 +19,8 @@ class Bot
         'main_menu' => 'Главное меню 📋',
         'premium'   => '⭐️ Hi-level доступ',
         'creators'  => 'Создатели 👨‍💻',
-        'call_back' => 'Обратная связь ✉️',
+        'feed_back' => 'Обратная связь ✉️',
+        'feed_back_msg' => 'Чтобы оставить отзыв, напишите ответ на это сообщение...'
     ];
 
 
@@ -29,6 +30,8 @@ class Bot
         $this->oTgPost        = new TgPost();
         $this->oLibrary       = new Library();
         $this->oMessageIn     = new MessageIn();
+
+        plog($this->oMessageIn->getMessageArray());
 
         if(is_null($this->oMessageIn->getUsername()))
             errorDie('username не может быть пустым');
@@ -109,11 +112,24 @@ class Bot
 
 
     /**
-     * Процесс ответа на текстовые сообщения
+     * Обработка текстовых сообщений
      * @return void
      */
     private function processTextMessage(): void
     {
+
+        if(
+            isset($this->oMessageIn->getMessageArray()
+                ['message']['reply_to_message']) &&
+            $this->oMessageIn->getMessageArray()
+                ['message']['reply_to_message']['text'] === $this->mainKeyboard['feed_back_msg']
+        ) {
+
+            plog($this->oMessageIn->getUsername() . ': ' . $this->oMessageIn->getText(), ['postfix' => 'feedback']);
+            $this->oMessageOut->setText('Спасибо, ваше сообщение передано администратору! ✌️');
+            return;
+
+        }
 
         switch ($this->oMessageIn->getText()) {
 
@@ -151,20 +167,23 @@ class Bot
             // Создатели
             case $this->mainKeyboard['creators']:
 
-                $this->oMessageOut->setText('Инфа о создателях');
+                $this->oMessageOut->setText(
+                    "Инфа о создателях \n 1: @Corvin_Trainer\n 2: @NewArtist"
+                );
 
                 break;
 
             // Обратная связь
-            case $this->mainKeyboard['call_back']:
+            case $this->mainKeyboard['feed_back']:
 
-                $this->oMessageOut->setText('Инфа, как оставить отзыв');
+                $this->oMessageOut->setText($this->mainKeyboard['feed_back_msg']);
 
                 break;
 
             // Остальные сообщения
             default:
 
+                $this->processMainKeyboard();
                 $this->oMessageOut->setText('`Don\'t know o_O`');
 
                 break;
@@ -196,7 +215,7 @@ class Bot
                     'text'  => $this->mainKeyboard['creators'],
                 ],
                 [
-                    'text'  => $this->mainKeyboard['call_back'],
+                    'text'  => $this->mainKeyboard['feed_back'],
                     //'url' => 'https://YOUR/BUTTON/URL'
                 ],
             ]
