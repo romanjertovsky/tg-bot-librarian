@@ -21,7 +21,7 @@ function env(string $key, string $default = null): ?string {
         if(file_exists($iniFilePath))
             $ENV_CONFIG = parse_ini_file($iniFilePath, false, INI_SCANNER_TYPED);
         else
-            errorDie('ini file doesnt exist');
+            errorDie('helpers: ini file doesnt exist');
     }
 
     if(array_key_exists($key, $ENV_CONFIG))
