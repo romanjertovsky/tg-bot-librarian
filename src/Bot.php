@@ -15,12 +15,13 @@ class Bot
     private MessageOut  $oMessageOut;
     private Subscriber  $oSubscriber;
 
+
     private array $mainKeyboard = [
         'main_menu' => 'Главное меню 📋',
         'premium'   => '⭐️ Hi-level доступ',
         'creators'  => 'Создатели 👨‍💻',
         'feed_back' => 'Обратная связь ✉️',
-        'feed_back_msg' => 'Чтобы оставить отзыв, напишите ответ на это сообщение...'
+        'feed_back_msg' => 'Чтобы оставить отзыв, напишите ответ на это сообщение... ⬅️'
     ];
 
 
@@ -125,8 +126,12 @@ class Bot
                 ['message']['reply_to_message']['text'] === $this->mainKeyboard['feed_back_msg']
         ) {
 
-            plog($this->oMessageIn->getUsername() . ': ' . $this->oMessageIn->getText(), ['postfix' => 'feedback']);
+            plog($this->oMessageIn->getUsername() .
+                ': ' . $this->oMessageIn->getText(),
+                ['postfix' => 'feedback']);
+
             $this->oMessageOut->setText('Спасибо, ваше сообщение передано администратору! ✌️');
+
             return;
 
         }

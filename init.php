@@ -1,12 +1,12 @@
 <?php
 
-$F_START_TIME = microtime(true);            // Время выполнения
-const BASE_DIR = __DIR__ . DIRECTORY_SEPARATOR;     // Базовая директория
-const LIB_DIR = BASE_DIR . 'library' . DIRECTORY_SEPARATOR;     // Директория библиотеки
-
-require_once 'helpers.php';
+define("F_START_TIME", microtime(true));             // Время выполнения
+const BASE_DIR = __DIR__ . DIRECTORY_SEPARATOR;             // Базовая директория
+const LIB_DIR = BASE_DIR . 'library' . DIRECTORY_SEPARATOR; // Директория библиотеки
 
 header('Content-Type: application/json; charset=utf-8');
+
+require_once 'helpers.php';
 
 
 if(env('log_write')) {
@@ -35,10 +35,4 @@ if (env('debug')) {
     error_reporting(0);
 
 }
-
-
-
-
-
-
 

@@ -5,3 +5,4 @@ library/*
 log/*
 env.ini
 env_test.ini
+/public/index_test.php

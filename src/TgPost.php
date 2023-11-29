@@ -5,6 +5,8 @@ namespace RomanJertovsky\TgBotLibrarian;
 /*
  * Класс - отправщик
  */
+
+
 class TgPost
 {
 

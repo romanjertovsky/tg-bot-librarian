@@ -2,8 +2,6 @@
 
 use JetBrains\PhpStorm\NoReturn;
 
-$ENV_CONFIG = []; // Загруженные функцией env() настройки
-
 
 /**
  * Доступ к значениям файла конфигурации env.ini
@@ -13,15 +11,19 @@ $ENV_CONFIG = []; // Загруженные функцией env() настро�
  */
 function env(string $key, string $default = null): ?string {
 
-    global $ENV_CONFIG;
-
-    $iniFilePath = BASE_DIR . (defined('INI_FILE') ? INI_FILE : 'env.ini');
+    static $ENV_CONFIG = [];    // Загруженные настройки
 
     if(empty($ENV_CONFIG)) {
+
+        $iniFilePath =
+            BASE_DIR . 'env/' .
+            (defined('INI_FILE') ? INI_FILE : 'env.ini');
+
         if(file_exists($iniFilePath))
             $ENV_CONFIG = parse_ini_file($iniFilePath, false, INI_SCANNER_TYPED);
         else
             errorDie('ini file doesnt exist');
+
     }
 
     if(array_key_exists($key, $ENV_CONFIG))
@@ -41,8 +43,7 @@ function env(string $key, string $default = null): ?string {
  * @return string
  */
 function now(): string {
-    global $F_START_TIME;
-    return number_format((microtime(true) - $F_START_TIME), 3, '.');
+    return number_format((microtime(true) - F_START_TIME), 3, '.');
 }
 
 
