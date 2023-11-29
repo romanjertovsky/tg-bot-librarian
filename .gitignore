@@ -3,4 +3,4 @@
 _test/
 library/*
 log/*
-env.ini
+env/*
