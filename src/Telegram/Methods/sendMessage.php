@@ -2,16 +2,41 @@
 
 namespace RomanJertovsky\TgBotLibrarian\Telegram\Methods;
 
-class sendMessage
+use RomanJertovsky\TgBotLibrarian\Tools;
+use RomanJertovsky\TgBotLibrarian\Telegram\{
+    iMethod,
+    Client
+};
+
+
+class sendMessage implements iMethod
 {
 
-    public function __construct()
+    private string $postField;
+
+
+    public function __construct(array $message)
     {
-        plog('sendMessage');
+        $message['parse_mode'] = env('parse_mode');
+        $this->postField = Tools::json_encode($message);
     }
 
-    function TgPost()
+
+    public function getCurlOpts(): array
     {
-        // TODO: Implement TgPost() method.
+        return
+            [
+                CURLOPT_HTTPHEADER => [
+                    'Content-Type:application/json',
+                    'Content-Length: ' . strlen($this->postField)
+                ]
+            ];
     }
+
+
+    public function getPostField(): string
+    {
+        return $this->postField;
+    }
+
 }

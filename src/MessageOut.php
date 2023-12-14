@@ -2,7 +2,9 @@
 
 namespace RomanJertovsky\TgBotLibrarian;
 
-
+/**
+ * @deprecated
+ */
 class MessageOut
 {
 

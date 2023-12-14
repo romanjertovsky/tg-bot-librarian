@@ -12,14 +12,26 @@ use RomanJertovsky\TgBotLibrarian\Telegram\Methods\{
 class Telegram
 {
 
-    public function sendMessage(): sendMessage
+    private static function Transport(iMethod $out, string $methodName): void
     {
-        return new sendMessage();
+
+        $Client = new Client();
+        $Client->Post($out, $methodName);
+
+        // TODO logs/errors, return?
+
     }
 
-    public function sendPhoto(): sendPhoto
+
+    public static function sendMessage(array $message): void
     {
-        return new sendPhoto();
+        self::Transport(new sendMessage($message), __FUNCTION__);
+    }
+
+
+    public static function sendPhoto(int $chat_id, string $imagePath): void
+    {
+        self::Transport(new sendPhoto($chat_id, $imagePath), __FUNCTION__);
     }
     
     

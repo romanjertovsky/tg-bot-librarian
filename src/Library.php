@@ -2,7 +2,9 @@
 
 namespace RomanJertovsky\TgBotLibrarian;
 
-/*
+
+/**
+ * @deprecated
  * Класс для работы с библиотекой.
  * В библиотеке каждый каталог представляет собой набор данных для генерации сообщения.
  *
@@ -86,7 +88,6 @@ class Library
 
 
     /**
-     * TODO: вынести в отдельный объект
      * @param $sRoute
      * @param $jsonFile - имя файла-статьи, если нужно другое
      * @return string[]
@@ -105,8 +106,8 @@ class Library
                 $articleArray = json_decode(file_get_contents($sFullPath . $jsonFile), true);
 
                 // Ошибка JSON
-                if (json_last_error() !== 0)
-                    return $this->makeErrMsg('getArticleArray: ошибка JSON: ' . json_last_error_msg());
+                if (json_last_error() !== JSON_ERROR_NONE)
+                    return $this->addErrMsg('getArticleArray: ошибка JSON: ' . json_last_error_msg());
 
                 // Проверка наличия изображения
                 if(isset($articleArray['image'])) {
@@ -138,13 +139,13 @@ class Library
 
             } else {
 
-                return $this->makeErrMsg("ОШИБКА getArticleArray: путь $sRoute есть, но msg.json нет.");
+                return $this->addErrMsg("ОШИБКА getArticleArray: путь $sRoute есть, но msg.json нет.");
 
             }
 
         } else {
 
-            return  $this->makeErrMsg("ОШИБКА getArticleArray: пути $sRoute не существует в дереве каталогов.");
+            return  $this->addErrMsg("ОШИБКА getArticleArray: пути $sRoute не существует в дереве каталогов.");
 
         }
         
@@ -156,7 +157,7 @@ class Library
      * но возвращено пользователю будет только в случае debug = true
      * @return string[] - подробное описание ошибки либо дежурное сообщение из msg_error.json
      */
-    private function makeErrMsg(string $sErrorMessage): array
+    private function addErrMsg(string $sErrorMessage): array
     {
         plogErr($sErrorMessage);
 

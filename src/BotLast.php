@@ -3,10 +3,11 @@
 namespace RomanJertovsky\TgBotLibrarian;
 
 
-/*
+/**
+ * @deprecated
  * В этом классе - вся логика работы бота
  */
-class Bot
+class BotLast
 {
 
     private TgPost      $oTgPost;
@@ -25,7 +26,7 @@ class Bot
     ];
 
 
-     public function __construct()
+    public function __construct()
     {
 
         $this->oTgPost        = new TgPost();
@@ -57,7 +58,6 @@ class Bot
             $this->processTextMessage();
 
         } else {
-
 
             plogErr('В Bot->run() не выбран подходящий вариант!');
 

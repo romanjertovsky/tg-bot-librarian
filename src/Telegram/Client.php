@@ -2,29 +2,35 @@
 
 namespace RomanJertovsky\TgBotLibrarian\Telegram;
 
+/**
+ *
+ */
 class Client
 {
 
     private string $response = '';
 
-    public function TgPost(string $jsonMessage) {
 
-        $sUrl = "https://api.telegram.org/bot". env('bot_token') ."/sendMessage";
+    public function Post(iMethod $oData, string $methodName): void
+    {
+
+        $sUrl = "https://api.telegram.org/bot". env('bot_token') ."/$methodName";
+
         $oCurl = curl_init($sUrl);
 
         curl_setopt_array($oCurl, [
+            CURLOPT_POST            => true,
             CURLOPT_HEADER          => false,
-            CURLOPT_POSTFIELDS      => $jsonMessage,
-            CURLOPT_RETURNTRANSFER  => true,
-            CURLOPT_SSL_VERIFYPEER  => false,
-            CURLOPT_HTTPHEADER      =>
-                [
-                    'Content-Type:application/json',
-                    'Content-Length: ' . strlen($jsonMessage)
-                ],
-        ]);
+            CURLOPT_POSTFIELDS      => $oData->getPostField(),
+            CURLOPT_RETURNTRANSFER  => true]
+            + $oData->getCurlOpts()
+        );
 
         $this->response = curl_exec($oCurl);
+
+        if(curl_errno($oCurl) !== 0)
+            plogErr('Client->Post: curl_error: ' . curl_error($oCurl));
+
         curl_close($oCurl);
 
     }
@@ -35,9 +41,18 @@ class Client
         return $this->response;
     }
 
-    public function getResponseAsArray(): string
+
+    public function getResponseAsArray(): array
     {
-        return json_decode($this->response, true);
+
+        try {
+            $result = json_decode($this->response, true);
+        } catch (JsonException $exception) {
+            $result = ['Exception' => $exception->getMessage()];
+        }
+
+        return is_array($result) ? $result : [];
+
     }
 
 }

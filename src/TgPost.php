@@ -2,7 +2,8 @@
 
 namespace RomanJertovsky\TgBotLibrarian;
 
-/*
+/**
+ * @deprecated
  * Класс - отправщик
  */
 

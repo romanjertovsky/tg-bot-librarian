@@ -2,7 +2,9 @@
 
 namespace RomanJertovsky\TgBotLibrarian;
 
-
+/**
+ * @deprecated
+ */
 class MessageIn
 {
 
@@ -97,10 +99,6 @@ class MessageIn
 
     private function parseMessage(): array
     {
-
-// FIXME
-//        return $this->aTestMessage;;
-//        return $this->aTestCallback;;
 
         $sInput = file_get_contents("php://input");
 
