@@ -1,6 +1,7 @@
 .idea
-.gitignore
 _test/
+data/*
+env/*
 library/*
 log/*
-env/*
+.gitignore

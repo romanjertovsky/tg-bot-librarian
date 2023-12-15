@@ -2,21 +2,29 @@
 
 use JetBrains\PhpStorm\NoReturn;
 
-$ENV_CONFIG = []; // Загруженные функцией env() настройки
-
 
 /**
  * Доступ к значениям файла конфигурации env.ini
  * @param string $key - ключ
  * @param string|null $default - значение, если ключа не найдено
- * @return string
+ * @return string|null
  */
-function env(string $key, string $default = null): string {
+function env(string $key, string $default = null): ?string {
 
-    global $ENV_CONFIG;
+    static $ENV_CONFIG = [];    // Загруженные настройки
 
-    if(empty($ENV_CONFIG))
-        $ENV_CONFIG = parse_ini_file('env.ini', false, INI_SCANNER_TYPED);
+    if(empty($ENV_CONFIG)) {
+
+        $iniFilePath =
+            ENV_DIR .
+            (defined('INI_FILE') ? INI_FILE : 'env.ini');
+
+        if(file_exists($iniFilePath))
+            $ENV_CONFIG = parse_ini_file($iniFilePath, false, INI_SCANNER_TYPED);
+        else
+            errorDie('ini file doesnt exist');
+
+    }
 
     if(array_key_exists($key, $ENV_CONFIG))
         return $ENV_CONFIG[$key];
@@ -25,7 +33,7 @@ function env(string $key, string $default = null): string {
         return $default;
 
     else
-        return '';
+        return null;
 
 }
 
@@ -35,8 +43,7 @@ function env(string $key, string $default = null): string {
  * @return string
  */
 function now(): string {
-    global $F_START_TIME;
-    return number_format((microtime(true) - $F_START_TIME), 3, '.');
+    return number_format((microtime(true) - F_START_TIME), 3, '.');
 }
 
 
@@ -64,7 +71,7 @@ function plog(mixed $Record, array $configRewrite = []): void {
 
     $sLogRow =
         date('[d.m.Y H:i:s ') . now() . '] ' .
-        (is_array($Record) ? print_r($Record,true) : $Record) .
+        (is_array($Record) ? var_export($Record,true) : $Record) .
         PHP_EOL;
 
     if($bWorkLogPrint)
@@ -72,13 +79,11 @@ function plog(mixed $Record, array $configRewrite = []): void {
 
     if($bWorkLogWrite && !empty($sLogFileName)) {
 
-        $logDir = BASE_DIR . 'log' . DIRECTORY_SEPARATOR;
-
-        if (!file_exists($logDir) && !is_dir( $logDir ))
-            mkdir( $logDir );
+        if (!file_exists(LOG_DIR) && !is_dir(LOG_DIR))
+            mkdir(LOG_DIR);
 
         $sLogPath =
-            $logDir .
+            LOG_DIR .
             date('Y-m-d') .
             '_' .
             $sLogFileName .
@@ -96,6 +101,7 @@ function plog(mixed $Record, array $configRewrite = []): void {
 }
 
 
+
 /**
  * Функция предназначена для сокращения вызова plog для отдельного лога ошибок
  * Параметры log_write и log_print действуют
@@ -104,41 +110,9 @@ function plog(mixed $Record, array $configRewrite = []): void {
  */
 function plogErr(mixed $Record): void {
 
-    plog($Record, ['postfix' => env('log_err_postfix')]);
+    plog("ERROR: $Record", ['postfix' => env('log_err_postfix')]);
 
 }
-
-
-
-// Автозагрузчик для классов в src/
-spl_autoload_register(function ($sClassName) {
-
-    // Префикс пространства имён для данного проекта
-    $sPrefix = 'RomanJertovsky\\TgBotLibrarian';
-
-    // Использует ли запрошенный класс префикс пространства имён?
-    $iPrefixLen = strlen($sPrefix);
-    if (strncmp($sPrefix, $sClassName, $iPrefixLen) !== 0) {
-        // Нет, этот автозагрузчик не подходит
-        return;
-    }
-
-    // Относительное имя класса, без префикса
-    $sRelativeClassName = substr($sClassName, $iPrefixLen);
-
-    // Полный путь к файлу запрашиваемого класса
-    // с заменой разделителей в пространстве имён на разделители каталогов,
-    // добавление расширений
-    $sClassFile =
-        BASE_DIR .
-        'src' . DIRECTORY_SEPARATOR .
-        str_replace('\\', DIRECTORY_SEPARATOR, $sRelativeClassName) .
-        '.php';
-
-    if(file_exists($sClassFile))
-        require_once $sClassFile;
-
-});
 
 
 
@@ -151,6 +125,7 @@ spl_autoload_register(function ($sClassName) {
 {
 
     http_response_code($response_code);
-    die(json_encode(['error' => $sMessage]));
+    die(json_encode(['error' => $sMessage],
+        JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT));
 
 }
