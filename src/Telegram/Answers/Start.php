@@ -61,7 +61,7 @@ class Start implements iAnswer
 
         }
 
-        // Если статья и с фото
+        // Если статья с фото
         if(isset($Article) && !empty($Article->getImage())) {
             Telegram::sendPhoto(
                 Receiver::getChatId(),

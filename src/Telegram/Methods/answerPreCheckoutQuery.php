@@ -2,11 +2,11 @@
 
 namespace RomanJertovsky\TgBotLibrarian\Telegram\Methods;
 
-use RomanJertovsky\TgBotLibrarian\Tools;
 use RomanJertovsky\TgBotLibrarian\Telegram\iMethod;
+use RomanJertovsky\TgBotLibrarian\Tools;
 
 
-class sendMessage implements iMethod
+class answerPreCheckoutQuery implements iMethod
 {
 
     private string $postField;
@@ -17,7 +17,6 @@ class sendMessage implements iMethod
         $message['parse_mode'] = env('parse_mode');
         $this->postField = Tools::json_encode($message);
     }
-
 
     public function getCurlOpts(): array
     {
@@ -30,10 +29,8 @@ class sendMessage implements iMethod
             ];
     }
 
-
-    public function getPostField(): string
+    public function getPostField(): array|string
     {
         return $this->postField;
     }
-
 }

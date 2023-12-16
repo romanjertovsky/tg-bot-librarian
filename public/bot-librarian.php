@@ -3,6 +3,7 @@
 const INI_FILE = 'env.ini';
 require_once '../init.php';
 
+//plog('*log cleared*', ['append' => false]);
 
 $oBot = new \RomanJertovsky\TgBotLibrarian\Bot\Bot();
 

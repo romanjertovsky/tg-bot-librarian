@@ -31,7 +31,7 @@ class Router
     {
 
         if (empty(self::$routes))
-            require_once BASE_DIR . 'answer_routes.php';
+            require_once BASE_DIR  . 'src/answer_routes.php';
 
         // Обход всех установленных маршрутов
         foreach (self::$routes as $curRoute) {
