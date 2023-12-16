@@ -13,7 +13,7 @@ use RomanJertovsky\TgBotLibrarian\Tools;
 class AnswerArticle implements iAnswer
 {
 
-    public static function run()
+    public static function index()
     {
 
         $sRoute = Receiver::getCallbackData() ?? '/';

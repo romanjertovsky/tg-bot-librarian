@@ -12,9 +12,6 @@ class Router
     public static function add(array $messageKeys, mixed $value = '', string $route = ''): void
     {
 
-        if(!strpos($route, '::'))
-            $route .= '::run';
-
         self::$routes[] = [
             'path' => $messageKeys,
             'value' => $value,
@@ -94,6 +91,28 @@ class Router
         // Ни один маршрут к сообщению не подошёл!
 
         return null;
+
+    }
+
+
+    public static function Starter(?string $className): void
+    {
+
+        if(is_null($className))
+            return;
+
+        if(!strpos($className, '::'))
+            $className .= '::index';
+
+        $classPath = NS_PREFIX . "Telegram\Answers\\$className";
+
+        if(!is_callable($classPath))
+            plogErr("$classPath - route not found, shutdown");
+        else
+            $classPath();
+
+
+
 
     }
 

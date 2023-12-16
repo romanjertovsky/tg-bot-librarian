@@ -27,7 +27,7 @@ class Start implements iAnswer
     }
 
 
-    public static function run()
+    public static function index()
     {
 
         switch (Receiver::getText()) {
@@ -38,7 +38,7 @@ class Start implements iAnswer
                 break;
 
             case self::$mainMenuMsg['main_menu']:
-                AnswerArticle::run();
+                AnswerArticle::index();
                 return;
 
             case self::$mainMenuMsg['premium']:

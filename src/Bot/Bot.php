@@ -15,14 +15,11 @@ class Bot
     {
 
         $className = Router::getCurrentRoute(Receiver::getMessageArray());
+
         plog("RUN: $className");
 
-        $classPath = NS_PREFIX . "Telegram\Answers\\$className";
+        Router::Starter($className);
 
-        if(!is_callable($classPath))
-            plogErr("Requested route not found, shutdown");
-        else
-            $classPath();
 
     }
 
