@@ -24,15 +24,19 @@ class Receiver
 
         $sInput = file_get_contents("php://input");
 
-        if(empty($sInput))
-            plogErr('Receiver::parseMessage error: empty message from Telegram');
+        if(empty($sInput)) {
+            plogErr('Receiver::parseMessage empty message from Telegram');
+            return [];
+        }
 
         $aMessage = json_decode($sInput, true);
 
-        if (json_last_error() !== JSON_ERROR_NONE)
+        if (json_last_error() !== JSON_ERROR_NONE) {
             plogErr('parseMessage JSON error: ' . json_last_error_msg());
+            return [];
+        }
 
-        // TODO проверка корректности $aMessage
+
         return $aMessage;
 
     }

@@ -82,8 +82,9 @@ class Start implements iAnswer
     public static function Feedback()
     {
         plog(Receiver::getUsername() .
-            ': ' . Receiver::getText(),
-        ['postfix' => 'feedback']);
+            ': ' . Receiver::getText(), [
+            'postfix'   => 'feedback',
+            'write' => true]);
 
         Telegram::sendMessage([
             'text' => 'Спасибо, ваше сообщение передано администратору! ✌️',

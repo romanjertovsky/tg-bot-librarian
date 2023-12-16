@@ -2,9 +2,6 @@
 
 namespace RomanJertovsky\TgBotLibrarian\Bot;
 
-use RomanJertovsky\TgBotLibrarian\Telegram\Answers\Start;
-use RomanJertovsky\TgBotLibrarian\Telegram\Receiver;
-
 
 class Router
 {
@@ -35,6 +32,9 @@ class Router
      */
     public static function getCurrentRoute(array $messageArray): ?string
     {
+
+        if (empty(self::$routes))
+            require_once BASE_DIR . 'answer_routes.php';
 
         // Обход всех установленных маршрутов
         foreach (self::$routes as $curRoute) {
