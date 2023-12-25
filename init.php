@@ -1,12 +1,14 @@
 <?php
 
 define("F_START_TIME", microtime(true));                 // Время начала выполнения
+date_default_timezone_set(env('default_timezone'));
+
 const BASE_DIR  = __DIR__ . DIRECTORY_SEPARATOR;                // Базовая директория
 const DATA_DIR  = BASE_DIR . 'data' . DIRECTORY_SEPARATOR;      // Списки подписчиков
 const ENV_DIR   = BASE_DIR . 'env' . DIRECTORY_SEPARATOR;       // Директория с настройками
 const LIB_DIR   = BASE_DIR . 'library' . DIRECTORY_SEPARATOR;   // Директория библиотеки
 const LOG_DIR   = BASE_DIR . 'log' . DIRECTORY_SEPARATOR;       // Директория для логов
-const NS_PREFIX = 'RomanJertovsky\TgBotLibrarian\\';             // Префикс namespace
+const NS_PREFIX = 'RomanJertovsky\TgBotLibrarian\\';            // Префикс namespace
 
 header('Content-Type: application/json; charset=utf-8');
 

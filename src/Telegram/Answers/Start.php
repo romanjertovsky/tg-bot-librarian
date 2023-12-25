@@ -42,7 +42,7 @@ class Start implements iAnswer
                 return;
 
             case self::$mainMenuMsg['premium']:
-                $Article = new Article('/', 'msg_premium.json');
+                $Article = new Article('/', 'msg_not_premium.json');
                 $text = $Article->getText();
                 break;
 
@@ -56,7 +56,8 @@ class Start implements iAnswer
                 break;
 
             default:
-                $text = '`Don\'t know o_O`';
+                // Если отправлен текст из $mainMenuMsg, но в switch не разобран
+                $text = 'Unknown select o_O';
                 break;
 
         }
@@ -93,7 +94,7 @@ class Start implements iAnswer
     }
 
 
-    private static function mainKeyboardAssembly(): array
+    public static function mainKeyboardAssembly(): array
     {
 
         return [

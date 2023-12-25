@@ -13,7 +13,7 @@ class Bot
 
         $className = Router::getCurrentRoute(Receiver::getMessageArray());
 
-        plog("RUN: $className");
+        plog("Bot::run() route: [$className]");
 
         Router::Starter($className);
 

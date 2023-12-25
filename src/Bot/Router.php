@@ -41,7 +41,8 @@ class Router
             // Проверка вложенного пути для текущего маршрута
             foreach ($curRoute['path'] as $key) {
 
-                if(array_key_exists($key, $messageNested)) {
+                // Если во вложенном массиве существует следующий ключ
+                if(is_array($messageNested) && array_key_exists($key, $messageNested)) {
 
                     // вложенный ключ существует
                     $messageNested = $messageNested[$key];

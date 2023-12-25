@@ -19,7 +19,7 @@ Router::add(['message', 'reply_to_message', 'text'], Start::getMainMenu()['feed_
 //Любой колбэк
 Router::add(['callback_query', 'data'], '', 'AnswerArticle');
 
-// Премиум подписка
+// Запрос счёта на премиум подписку
 Router::add(['message', 'text'], '/getPremium', 'Premium');
 
 // Подтверждение оплаты подписки
@@ -30,5 +30,4 @@ Router::add(['message', 'successful_payment'], '', 'Premium::successful_payment'
 
 // Любое сообщение
 Router::add(['message'], '', 'AnyMessage');
-
 
