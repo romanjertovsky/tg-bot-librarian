@@ -10,6 +10,23 @@ class Subscriber
 
     private static array $userRow;
 
+
+    /**
+     * Создание пустого списка, при первом запуске
+     * @param string $listPath
+     * @return bool
+     */
+    private static function makeEmptyUserList(string $listPath)
+    {
+        plog($listPath);
+        file_put_contents(
+            $listPath,
+            "chat_id;user_name;pay_date");
+
+        return true;
+    }
+
+    
     /**
      * @param string|null $chat_id
      * @return bool
@@ -35,8 +52,12 @@ class Subscriber
         if(isset(self::$userRow))
             return self::$userRow;
 
+        $listPath = DATA_DIR . env('premium_list');
 
-        $dFile = fopen(DATA_DIR . env('premium_list'), 'r');
+        if(!file_exists($listPath))
+            self::makeEmptyUserList($listPath);
+
+        $dFile = fopen($listPath, 'r');
 
         self::$userRow = [];
 
@@ -91,9 +112,9 @@ class Subscriber
 
     }
 
+
     public static function getRegistrationDate() {
 
     }
-
 
 }
