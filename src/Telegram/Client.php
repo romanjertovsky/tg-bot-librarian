@@ -8,12 +8,14 @@ namespace RomanJertovsky\TgBotLibrarian\Telegram;
 class Client
 {
 
-    private string $response = '';
+    private static string $response = '';
+    private static string|array|null $postField = null;
 
 
     public function Post(iMethod $oData, string $methodName): void
     {
 
+        self::$postField = $oData->getPostField();
         $sUrl = "https://api.telegram.org/bot". env('bot_token') ."/$methodName";
 
         $oCurl = curl_init($sUrl);
@@ -26,7 +28,7 @@ class Client
             + $oData->getCurlOpts()
         );
 
-        $this->response = curl_exec($oCurl);
+        self::$response = curl_exec($oCurl);
 
         if(curl_errno($oCurl) !== 0)
             plogErr('Client->Post: curl_error: ' . curl_error($oCurl));
@@ -36,17 +38,17 @@ class Client
     }
 
 
-    public function getResponse(): string
+    public static function getResponse(): string
     {
-        return $this->response;
+        return self::$response;
     }
 
 
-    public function getResponseAsArray(): array
+    public static function getResponseAsArray(): array
     {
 
         try {
-            $result = json_decode($this->response, true);
+            $result = json_decode(self::$response, true);
         } catch (JsonException $exception) {
             $result = ['Exception' => $exception->getMessage()];
         }
@@ -54,5 +56,11 @@ class Client
         return is_array($result) ? $result : [];
 
     }
+
+    public static function getCurPostField(): array
+    {
+        return [self::$postField];
+    }
+
 
 }

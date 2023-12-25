@@ -13,7 +13,7 @@ use RomanJertovsky\TgBotLibrarian\Tools;
 class AnswerArticle implements iAnswer
 {
 
-    public static function run()
+    public static function index()
     {
 
         $sRoute = Receiver::getCallbackData() ?? '/';
@@ -23,10 +23,10 @@ class AnswerArticle implements iAnswer
         // Если статья премиум, а подписчик нет
         if(
             $oArticle->isPremium() &&
-            !Subscriber::isPremium(Receiver::getUsername())
+            !Subscriber::isPremium()
         ) {
 
-            $oMsgPremiumArticle = new Article('', 'msg_premium.json');
+            $oMsgPremiumArticle = new Article('', 'msg_not_premium.json');
             $sText = $oArticle->getIntro() . PHP_EOL . PHP_EOL . $oMsgPremiumArticle->getText();
 
         } else {

@@ -2,9 +2,6 @@
 
 namespace RomanJertovsky\TgBotLibrarian\Bot;
 
-use RomanJertovsky\TgBotLibrarian\Telegram\Answers\Start;
-use RomanJertovsky\TgBotLibrarian\Telegram\Receiver;
-
 
 class Router
 {
@@ -14,9 +11,6 @@ class Router
 
     public static function add(array $messageKeys, mixed $value = '', string $route = ''): void
     {
-
-        if(!strpos($route, '::'))
-            $route .= '::run';
 
         self::$routes[] = [
             'path' => $messageKeys,
@@ -36,6 +30,9 @@ class Router
     public static function getCurrentRoute(array $messageArray): ?string
     {
 
+        if (empty(self::$routes))
+            require_once BASE_DIR  . 'src/answer_routes.php';
+
         // Обход всех установленных маршрутов
         foreach (self::$routes as $curRoute) {
 
@@ -44,7 +41,8 @@ class Router
             // Проверка вложенного пути для текущего маршрута
             foreach ($curRoute['path'] as $key) {
 
-                if(array_key_exists($key, $messageNested)) {
+                // Если во вложенном массиве существует следующий ключ
+                if(is_array($messageNested) && array_key_exists($key, $messageNested)) {
 
                     // вложенный ключ существует
                     $messageNested = $messageNested[$key];
@@ -94,6 +92,28 @@ class Router
         // Ни один маршрут к сообщению не подошёл!
 
         return null;
+
+    }
+
+
+    public static function Starter(?string $className): void
+    {
+
+        if(is_null($className))
+            return;
+
+        if(!strpos($className, '::'))
+            $className .= '::index';
+
+        $classPath = NS_PREFIX . "Telegram\Answers\\$className";
+
+        if(!is_callable($classPath))
+            plogErr("$classPath - route not found, shutdown");
+        else
+            $classPath();
+
+
+
 
     }
 

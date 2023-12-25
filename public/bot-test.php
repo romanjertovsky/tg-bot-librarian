@@ -1,6 +1,6 @@
 <?php
 
-const INI_FILE = 'env_test.ini';
+const INI_FILE = 'bot-test.ini';
 require_once '../init.php';
 
 plog('*log cleared*', ['append' => false]);

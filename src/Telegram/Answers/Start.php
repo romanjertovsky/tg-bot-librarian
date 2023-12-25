@@ -27,7 +27,7 @@ class Start implements iAnswer
     }
 
 
-    public static function run()
+    public static function index()
     {
 
         switch (Receiver::getText()) {
@@ -38,11 +38,11 @@ class Start implements iAnswer
                 break;
 
             case self::$mainMenuMsg['main_menu']:
-                AnswerArticle::run();
+                AnswerArticle::index();
                 return;
 
             case self::$mainMenuMsg['premium']:
-                $Article = new Article('/', 'msg_premium.json');
+                $Article = new Article('/', 'msg_not_premium.json');
                 $text = $Article->getText();
                 break;
 
@@ -56,12 +56,13 @@ class Start implements iAnswer
                 break;
 
             default:
-                $text = '`Don\'t know o_O`';
+                // Если отправлен текст из $mainMenuMsg, но в switch не разобран
+                $text = 'Unknown select o_O';
                 break;
 
         }
 
-        // Если статья и с фото
+        // Если статья с фото
         if(isset($Article) && !empty($Article->getImage())) {
             Telegram::sendPhoto(
                 Receiver::getChatId(),
@@ -82,8 +83,9 @@ class Start implements iAnswer
     public static function Feedback()
     {
         plog(Receiver::getUsername() .
-            ': ' . Receiver::getText(),
-        ['postfix' => 'feedback']);
+            ': ' . Receiver::getText(), [
+            'postfix'   => 'feedback',
+            'write' => true]);
 
         Telegram::sendMessage([
             'text' => 'Спасибо, ваше сообщение передано администратору! ✌️',
@@ -92,7 +94,7 @@ class Start implements iAnswer
     }
 
 
-    private static function mainKeyboardAssembly(): array
+    public static function mainKeyboardAssembly(): array
     {
 
         return [
